@@ -22,4 +22,11 @@ public class Production {
     public String toString() {
         return leftSide + "->" + rightSide;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Production production = (Production) obj;
+        return (production.getLeftSide() == this.leftSide && production.getRightSide().equals(this.rightSide));
+    }
+
 }

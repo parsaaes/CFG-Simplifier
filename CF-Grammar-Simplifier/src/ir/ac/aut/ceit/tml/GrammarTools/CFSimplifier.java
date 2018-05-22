@@ -10,6 +10,47 @@ import java.util.HashSet;
 public class CFSimplifier {
 // TODO [check if cfg is lambda free or not]
 
+    public void simplify(Grammar grammar){
+        removeNullProducts(grammar);
+        removeUnitProducts(grammar);
+        removeUselessProducts(grammar);
+    }
+    public void removeUnitProducts(Grammar grammar){
+        ArrayList<Production> newProducts = new ArrayList<>();
+        Graph dependencyGraph = new Graph(grammar.getVars());
+
+        for (Production production : grammar.getProductions()) {
+            if(!(production.getRightSide().length() == 1 && grammar.getVars().indexOf(production.getRightSide().charAt(0)) != -1)){
+                    newProducts.add(production);
+            }
+            else if(production.getLeftSide() != production.getRightSide().charAt(0)){
+                dependencyGraph.insertEdge(production.getLeftSide(),production.getRightSide().charAt(0));
+            }
+        }
+
+
+        ArrayList<Production> newProductsPart2 = new ArrayList<>();
+        for (char x : grammar.getVarsAsArr()) {
+            for (char y : grammar.getVarsAsArr()) {
+                if(dependencyGraph.isVisitedFrom(x,y)){
+                    for (Production newProduct : newProducts) {
+                        if(newProduct.getLeftSide() == y){
+                            newProductsPart2.add(new Production(x, newProduct.getRightSide()));
+                        }
+                    }
+                }
+            }
+        }
+        for (Production production : newProductsPart2) {
+            if(!newProducts.contains(production)){
+                newProducts.add(production);
+            }
+        }
+//        dependencyGraph.printAdjList();
+//        System.out.println(newProducts);
+        grammar.setProductions(newProducts);
+    }
+
     public void removeNullProducts(Grammar grammar){
         // create set of nullable vars
         String vN = "";

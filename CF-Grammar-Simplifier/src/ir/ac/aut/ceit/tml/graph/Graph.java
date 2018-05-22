@@ -9,12 +9,14 @@ public class Graph {
     private HashMap<Integer, Character> intToChar;
     private int lastCharMap = -1;
     private boolean[] isVisited;
+    private int vertexNumber;
 
     public Graph(String vertexList){
         // System.out.println(vertexList);
         adjList = new ListNode[vertexList.length()];
         charToInt = new HashMap<>();
         intToChar = new HashMap<>();
+        vertexNumber = vertexList.length();
         isVisited = new boolean[vertexList.length()];
         int charMap = -1;
         for (char c : vertexList.toCharArray()) {
@@ -46,6 +48,7 @@ public class Graph {
     }
 
     public void runDFS(char start){
+        isVisited = new boolean[vertexNumber];
         runDFS(charToInt.get(start));
     }
     private void runDFS(int startVertex) {
@@ -58,6 +61,11 @@ public class Graph {
             }
             adjVertex = adjVertex.getNext();
         }
+    }
+
+    public boolean isVisitedFrom(char start, char visited){
+        runDFS(start);
+        return isVisited[charToInt.get(visited)];
     }
 
     public String getVisitedNodes() {

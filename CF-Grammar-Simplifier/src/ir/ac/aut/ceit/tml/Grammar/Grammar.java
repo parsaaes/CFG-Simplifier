@@ -41,10 +41,21 @@ public class Grammar {
                 "T : [" + terminals + "]\n" +
                 "S : " + startVar +
                 "\nP : \n";
-        for (Production production : productions) {
-            result += production.toString();
-            result += "\n";
+        String product = "";
+        for (char c : vars.toCharArray()) {
+            product = c + "->";
+            for (Production production : productions) {
+                if(production.getLeftSide() == c){
+                  product += production.getRightSide() + "|";
+                }
+            }
+            product = product.substring(0,product.length()-1);
+            result += product + "\n";
         }
+//        for (Production production : productions) {
+//            result += production.toString();
+//            result += "\n";
+//        }
         return result;
     }
 
