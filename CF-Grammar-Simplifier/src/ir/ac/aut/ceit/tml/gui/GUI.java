@@ -1,6 +1,7 @@
 package ir.ac.aut.ceit.tml.gui;
 
 
+import ir.ac.aut.ceit.tml.fileUtils.FileOps;
 import ir.ac.aut.ceit.tml.grammar.Grammar;
 import ir.ac.aut.ceit.tml.grammarTools.CFSimplifier;
 import ir.ac.aut.ceit.tml.grammarTools.Parser;
@@ -113,21 +114,15 @@ public class GUI {
                     infoLabel.setText("<html>"+ savedInfo +"</html>");
                     String saveFileName = grammarFile.getName().substring(0,  grammarFile.getName().length()-4) + "-Simplified.txt";
                     File save = new File(grammarFile.getParent() + "/" + saveFileName);
-                    try {
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(save));
-                        Grammar simplifiedGrammar = parser.getGrammar();
-                        bw.write(simplifiedGrammar.getAsString());
-                        bw.close();
-                        JPanel savedAddressPanel = new JPanel();
-                        savedAddressPanel.setLayout(new BorderLayout());
-                        savedAddressPanel.setBackground(Color.GREEN);
-                        JLabel savedLabel = new JLabel("<html><b>saved at</b> " + saveFileName + "</html>");
-                        savedLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-                        savedAddressPanel.add(savedLabel);
-                        infoPanel.add(savedAddressPanel,BorderLayout.SOUTH);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+                    Grammar simplifiedGrammar = parser.getGrammar();
+                    FileOps.write(simplifiedGrammar.getAsString(),saveFileName);
+                    JPanel savedAddressPanel = new JPanel();
+                    savedAddressPanel.setLayout(new BorderLayout());
+                    savedAddressPanel.setBackground(Color.GREEN);
+                    JLabel savedLabel = new JLabel("<html><b>saved at</b> " + saveFileName + "</html>");
+                    savedLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+                    savedAddressPanel.add(savedLabel);
+                    infoPanel.add(savedAddressPanel,BorderLayout.SOUTH);
                 }
             }
         });

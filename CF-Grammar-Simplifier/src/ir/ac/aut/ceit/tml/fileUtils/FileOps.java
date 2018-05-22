@@ -21,4 +21,14 @@ public class FileOps {
         }
         return result;
     }
+
+    public static void write(String text, String path){
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)));
+            bw.write(text);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public class CFSimplifier {
-// TODO [check if cfg is lambda free or not]
+
 private boolean lambdaFree = true;
 
     public void simplify(Grammar grammar){
