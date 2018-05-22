@@ -89,4 +89,24 @@ public class Grammar {
     public void setProductions(ArrayList<Production> productions) {
         this.productions = productions;
     }
+
+    public String getAsString(){
+        String result = "";
+        result += vars + "\n" + terminals + "\n" + String.valueOf(startVar) + "\n";
+//        for (Production production : productions) {
+//            result += production + "\n";
+//        }
+        String product = "";
+        for (char c : vars.toCharArray()) {
+            product = c + " -> ";
+            for (Production production : productions) {
+                if(production.getLeftSide() == c){
+                    product += production.getRightSide() + "|";
+                }
+            }
+            product = product.substring(0,product.length()-1);
+            result += product + "\n";
+        }
+        return result;
+    }
 }

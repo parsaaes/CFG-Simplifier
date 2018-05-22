@@ -9,11 +9,15 @@ import java.util.HashSet;
 
 public class CFSimplifier {
 // TODO [check if cfg is lambda free or not]
+private boolean lambdaFree = true;
 
     public void simplify(Grammar grammar){
         removeNullProducts(grammar);
         removeUnitProducts(grammar);
         removeUselessProducts(grammar);
+        if(!lambdaFree){
+            grammar.getProductions().add(new Production(grammar.getStartVar(),"^"));
+        }
     }
     public void removeUnitProducts(Grammar grammar){
         ArrayList<Production> newProducts = new ArrayList<>();
@@ -80,6 +84,11 @@ public class CFSimplifier {
                     added = true;
                 }
             }
+        }
+
+        // find if it's lambda free
+        if(vN.indexOf(grammar.getStartVar()) != -1){
+            lambdaFree = false;
         }
 
         // System.out.println("--->  " + vN);
