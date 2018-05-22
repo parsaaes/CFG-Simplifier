@@ -1,12 +1,109 @@
-package ir.ac.aut.ceit.tml.GrammarTools;
+package ir.ac.aut.ceit.tml.grammarTools;
 
-import ir.ac.aut.ceit.tml.Grammar.Grammar;
-import ir.ac.aut.ceit.tml.Grammar.Production;
-import ir.ac.aut.ceit.tml.Graph.Graph;
+import ir.ac.aut.ceit.tml.grammar.Grammar;
+import ir.ac.aut.ceit.tml.grammar.Production;
+import ir.ac.aut.ceit.tml.graph.Graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CFSimplifier {
+// TODO [check if cfg is lambda free or not]
+
+    public void removeNullProducts(Grammar grammar){
+        // create set of nullable vars
+        String vN = "";
+        for (Production production : grammar.getProductions()) {
+            if(production.getRightSide().equals(String.valueOf(Grammar.lambda))) {
+//                if (production.getLeftSide() != grammar.getStartVar()) {
+//                    vN += production.getLeftSide();
+//                }
+                vN += production.getLeftSide();
+            }
+        }
+
+        // add A if A->A1A2..AN for All Ai in vN
+        boolean added = true;
+        while (added) {
+            added = false;
+            for (Production production : grammar.getProductions()) {
+                boolean rightSideIsInVn = true;
+                for (char c : production.getRightSide().toCharArray()) {
+                    if (vN.indexOf(c) == -1) {
+                        rightSideIsInVn = false;
+                        break;
+                    }
+                }
+                if (rightSideIsInVn && (vN.indexOf(production.getLeftSide()) == -1)) {
+                    vN += production.getLeftSide();
+                    added = true;
+                }
+            }
+        }
+
+        // System.out.println("--->  " + vN);
+
+
+        // add products and replicates
+        ArrayList<Production> newProducts = new ArrayList<>();
+        for (Production production : grammar.getProductions()) {
+            if(!production.getRightSide().equals(String.valueOf(Grammar.lambda))){
+                newProducts.add(production);
+                HashSet<String> combSet = createProductionComb(production.getRightSide(), vN);
+                for (String s : combSet) {
+                    if(!(s == null || s.length() <= 0 || s.equals(""))) {
+                        // System.out.println("[" + s + "]");
+                        newProducts.add(new Production(production.getLeftSide(), s));
+                    }
+                }
+            }
+        }
+//        System.out.println(newProducts);
+//        System.out.println(newProducts.size());
+        grammar.setProductions(newProducts);
+    }
+
+
+    public HashSet<String> createProductionComb(String product, String vars){
+        HashSet<String> resultSet = new HashSet<>();
+        int count = 0;
+        for (char c : product.toCharArray()) {
+            if(vars.indexOf(c) != -1){
+                count++;
+            }
+        }
+        // not adding 111...111
+        for(int i = 0; i < Math.pow(2,count) - 1; i++){
+            String combBin = Integer.toBinaryString(i);
+            if(combBin.length() < count){
+                String zeroPad = "";
+                for(int j = 0; j < count - combBin.length(); j++){
+                    zeroPad += "0";
+                }
+                combBin = zeroPad + combBin;
+            }
+
+            int occurrence = -1;
+            char[] productAsArr = product.toCharArray();
+            String newProduct = "";
+            for (int k = 0; k < productAsArr.length; k++) {
+                if(vars.indexOf(productAsArr[k]) != -1){
+                    occurrence++;
+                    if(combBin.charAt(occurrence) == '1'){
+                        newProduct += productAsArr[k];
+                    }
+                }
+                else {
+                    newProduct += productAsArr[k];
+                }
+            }
+            resultSet.add(newProduct);
+        }
+
+        return resultSet;
+
+    }
+
     public void removeUselessProducts(Grammar grammar) {
         removeUnableToGiveTerminal(grammar);
         removeUnableToGetFromStart(grammar);
@@ -24,13 +121,12 @@ public class CFSimplifier {
         }
         varGraph.runDFS(grammar.getStartVar());
         grammar.setVars(varGraph.getVisitedNodes());
-        setNewProducts(grammar,varGraph.getVisitedNodes());
+        setNewProductsByNewVars(grammar,varGraph.getVisitedNodes());
         // System.out.println(varGraph.getVisitedNodes());
     }
 
     private void removeUnableToGiveTerminal(Grammar grammar){
         String v1 = "";
-        // v1 += grammar.getStartVar();
         boolean added = true;
         while(added){
             added = false;
@@ -42,27 +138,28 @@ public class CFSimplifier {
                         added = true;
                     }
                     // for taking care of start -> lambda(^)
-                    else if(
-                    (v == grammar.getStartVar()  && production.getLeftSide() == grammar.getStartVar() && production.getRightSide().equals("^"))
-                            && !v1.contains(String.valueOf(v))){
-                        v1 += v;
-                        added = true;
-                    }
+//                    else if(
+//                    (v == grammar.getStartVar()  && production.getLeftSide() == grammar.getStartVar() && production.getRightSide().equals("^"))
+//                            && !v1.contains(String.valueOf(v))){
+//                        v1 += v;
+//                        added = true;
+//                    }
                 }
             }
         }
         grammar.setVars(v1);
-        setNewProducts(grammar, v1);
+        setNewProductsByNewVars(grammar, v1);
     }
 
-    private void setNewProducts(Grammar grammar, String newVars) {
+    private void setNewProductsByNewVars(Grammar grammar, String newVars) {
         ArrayList<Production> newProducts = new ArrayList<>();
         for (Production production : grammar.getProductions()) {
             boolean productionIsSafe = true;
             if(newVars.contains(String.valueOf(production.getLeftSide()))){
                 for (char c : production.getRightSide().replaceAll("|", "").toCharArray()) {
                     // taking care of start -> lambda(^)
-                    if(!(newVars.contains(String.valueOf(c)) || grammar.getTerminals().contains(String.valueOf(c)) || c == '^')){
+                    // || c == '^'
+                    if(!(newVars.contains(String.valueOf(c)) || grammar.getTerminals().contains(String.valueOf(c)) )){
                         productionIsSafe = false;
                     }
                 }

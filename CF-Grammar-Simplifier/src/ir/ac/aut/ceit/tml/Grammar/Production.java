@@ -1,4 +1,4 @@
-package ir.ac.aut.ceit.tml.Grammar;
+package ir.ac.aut.ceit.tml.grammar;
 
 
 public class Production {

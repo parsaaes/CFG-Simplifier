@@ -1,4 +1,4 @@
-package ir.ac.aut.ceit.tml.Grammar;
+package ir.ac.aut.ceit.tml.grammar;
 
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ public class Grammar {
     private String terminals;
     private char startVar;
     private ArrayList<Production> productions;
+    public static final char lambda = '^';
 
     public Grammar(String vars, String terminals, char startVar) {
         this.vars = vars;

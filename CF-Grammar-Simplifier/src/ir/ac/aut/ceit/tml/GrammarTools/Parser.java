@@ -1,7 +1,7 @@
-package ir.ac.aut.ceit.tml.GrammarTools;
+package ir.ac.aut.ceit.tml.grammarTools;
 
 
-import ir.ac.aut.ceit.tml.Grammar.Grammar;
+import ir.ac.aut.ceit.tml.grammar.Grammar;
 import ir.ac.aut.ceit.tml.fileUtils.FileOps;
 
 import java.util.ArrayList;
