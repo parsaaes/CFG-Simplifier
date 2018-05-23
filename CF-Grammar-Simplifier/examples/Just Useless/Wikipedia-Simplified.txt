@@ -1,0 +1,7 @@
+V : [SBC]
+T : [bcde]
+S : S
+P : 
+S->Bb|Cc
+B->Bb|b
+C->Cc|c

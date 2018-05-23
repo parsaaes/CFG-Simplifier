@@ -1,0 +1,6 @@
+V : [SZ]
+T : [ab]
+S : S
+P : 
+S->aZb|ab
+Z->aZb|ab

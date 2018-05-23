@@ -44,13 +44,19 @@ public class Grammar {
         String product = "";
         for (char c : vars.toCharArray()) {
             product = c + "->";
+            boolean added = false;
             for (Production production : productions) {
                 if(production.getLeftSide() == c){
                   product += production.getRightSide() + "|";
+                  added = true;
                 }
             }
-            product = product.substring(0,product.length()-1);
-            result += product + "\n";
+            if(product.charAt(product.length()-1) == '|') {
+                product = product.substring(0, product.length() - 1);
+            }
+            if(added) {
+                result += product + "\n";
+            }
         }
 //        for (Production production : productions) {
 //            result += production.toString();
@@ -99,14 +105,24 @@ public class Grammar {
         String product = "";
         for (char c : vars.toCharArray()) {
             product = c + " -> ";
+            boolean added = false;
             for (Production production : productions) {
                 if(production.getLeftSide() == c){
                     product += production.getRightSide() + "|";
+                    added = true;
                 }
             }
-            product = product.substring(0,product.length()-1);
-            result += product + "\n";
+            if(product.charAt(product.length()-1) == '|') {
+                product = product.substring(0, product.length() - 1);
+            }
+            if(added) {
+                result += product + "\n";
+            }
         }
         return result;
+    }
+
+    public void setStartVar(char startVar) {
+        this.startVar = startVar;
     }
 }

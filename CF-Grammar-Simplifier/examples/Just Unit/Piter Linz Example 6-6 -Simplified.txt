@@ -1,0 +1,7 @@
+V : [SAB]
+T : [ab]
+S : S
+P : 
+S->Aa|a|bc|bb
+A->a|bc|bb
+B->bb|a|bc

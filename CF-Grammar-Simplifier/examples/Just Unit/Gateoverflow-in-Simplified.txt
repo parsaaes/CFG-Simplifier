@@ -1,0 +1,8 @@
+V : [ZSAB]
+T : [ab]
+S : Z
+P : 
+Z->ASA|aB|a|SA|AS
+S->ASA|aB|a|SA|AS
+A->ASA|aB|a|SA|AS|b
+B->b

@@ -3,6 +3,6 @@ a b d
 S
 S -> ABaC
 A -> BC
-B -> b | ^
+B -> b|^
 C -> D|^
 D -> d

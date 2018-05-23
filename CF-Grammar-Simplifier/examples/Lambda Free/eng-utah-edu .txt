@@ -1,0 +1,8 @@
+S A B C D E
+a b c d e f
+S
+S -> AB|CD
+A -> aA|bB
+B -> c|d
+D -> AC|BDE
+E -> eE|D|f

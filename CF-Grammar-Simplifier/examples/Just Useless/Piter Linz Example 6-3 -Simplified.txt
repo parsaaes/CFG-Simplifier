@@ -1,0 +1,6 @@
+V : [SA]
+T : [ab]
+S : S
+P : 
+S->aS|A
+A->a

@@ -1,0 +1,5 @@
+SA
+ab
+S
+S -> aA|a
+A -> aaA|aa

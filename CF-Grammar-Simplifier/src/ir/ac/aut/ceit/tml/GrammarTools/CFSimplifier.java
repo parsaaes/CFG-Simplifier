@@ -13,10 +13,28 @@ private boolean lambdaFree = true;
 
     public void simplify(Grammar grammar){
         removeNullProducts(grammar);
-        removeUnitProducts(grammar);
+        if(grammarIsNotEmpty(grammar)) {
+            removeUnitProducts(grammar);
+        }
         removeUselessProducts(grammar);
-        if(!lambdaFree){
-            grammar.getProductions().add(new Production(grammar.getStartVar(),"^"));
+        if(!lambdaFree && grammar.getVars().indexOf("$") == -1){
+            if( grammar.getVars().indexOf(grammar.getStartVar()) != -1) {
+                grammar.setVars("$" + grammar.getVars());
+                char previousStartVar = grammar.getStartVar();
+                grammar.setStartVar('$');
+                grammar.getProductions().add(new Production(grammar.getStartVar(), String.valueOf(previousStartVar)));
+                grammar.getProductions().add(new Production(grammar.getStartVar(), String.valueOf(Grammar.lambda)));
+            }
+            else {
+                    grammar.setVars("$" + grammar.getVars());
+                    grammar.setStartVar('$');
+                    grammar.getProductions().add(new Production(grammar.getStartVar(), String.valueOf(Grammar.lambda)));
+            }
+        }
+        if(!grammarIsNotEmpty(grammar)){
+            grammar.setProductions(new ArrayList<>());
+        } else {
+            sortProducts(grammar);
         }
     }
     public void removeUnitProducts(Grammar grammar){
@@ -155,8 +173,13 @@ private boolean lambdaFree = true;
     }
 
     public void removeUselessProducts(Grammar grammar) {
-        removeUnableToGiveTerminal(grammar);
-        removeUnableToGetFromStart(grammar);
+        if(grammarIsNotEmpty(grammar)) {
+            removeUnableToGiveTerminal(grammar);
+        }
+        if(grammarIsNotEmpty(grammar)) {
+            removeUnableToGetFromStart(grammar);
+        }
+
     }
 
     public void removeUnableToGetFromStart(Grammar grammar) {
@@ -232,6 +255,19 @@ private boolean lambdaFree = true;
             }
         }
         return true;
+    }
+
+    private boolean grammarIsNotEmpty(Grammar grammar){
+        if(grammar != null){
+            if(!(grammar.getVars() == null || grammar.getVars().length() <= 0 || grammar.getVars().equals("") || grammar.getVars().indexOf(grammar.getStartVar())== -1)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void sortProducts(Grammar grammar){
+        grammar.setVars(grammar.getStartVar() + grammar.getVars().replace(String.valueOf(grammar.getStartVar()),""));
     }
 
 }

@@ -1,0 +1,7 @@
+Z S A B
+a b
+Z
+Z -> S
+S -> ASA | aB | a | SA | AS | S
+A -> B | S
+B -> b

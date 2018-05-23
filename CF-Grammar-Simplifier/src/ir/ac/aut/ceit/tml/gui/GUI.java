@@ -35,11 +35,11 @@ public class GUI {
         JPanel fileChoosePanel = new JPanel();
         fileChoosePanel.setLayout(new GridLayout(10,1));
         fileChoosePanel.add(new JLabel("Choose a CFG file and press Simplify:"));
-        fileChoosePanel.add(new JLabel("<html>Attention! The file must be in the fallowing form: (some example files are available)</html>"));
+        fileChoosePanel.add(new JLabel("<html>Attention! The file <b>must</b> be in the fallowing form: (some example files are available)</html>"));
         fileChoosePanel.add(new JLabel("<S> <V1> <V2> ..."));
-        fileChoosePanel.add(new JLabel("<T1> <T2> ..."));
+        fileChoosePanel.add(new JLabel("<t1> <t2> ..."));
         fileChoosePanel.add(new JLabel("<S>"));
-        fileChoosePanel.add(new JLabel("<V1 -> T1>"));
+        fileChoosePanel.add(new JLabel("<V1 -> t1>"));
         fileChoosePanel.add(new JLabel("..."));
         fileChoosePanel.add(new JLabel("<html><b>Lambda notation is ^</b></html>"));
         JButton openBtn = new JButton("Open");
@@ -95,6 +95,7 @@ public class GUI {
                         parser = new Parser(filepath);
                         originalText.setText(parser.getGrammar().toString());
                         infoLabel.setText("Loaded.");
+                        simplifyBtn.setEnabled(true);
                         fileOpened = true;
                     }
                 }
@@ -107,19 +108,20 @@ public class GUI {
                     JOptionPane.showMessageDialog(null,"Select a valid CFG file first.");
                 }
                 else {
+                    simplifyBtn.setEnabled(false);
                     String savedInfo = "Simplified.<br>1- removed null products.<br> 2- removed unit products.<br> 3- removed useless products.";
                     CFSimplifier cfSimplifier = new CFSimplifier();
                     cfSimplifier.simplify(parser.getGrammar());
                     simplifiedText.setText(parser.getGrammar().toString());
                     infoLabel.setText("<html>"+ savedInfo +"</html>");
-                    String saveFileName = grammarFile.getName().substring(0,  grammarFile.getName().length()-4) + "-Simplified.txt";
-                    File save = new File(grammarFile.getParent() + "/" + saveFileName);
+                    String saveFileName = grammarFile.getAbsolutePath().substring(0,  grammarFile.getAbsoluteFile().toString().length()-4) + "-Simplified.txt";
+                    File save = new File(saveFileName);
                     Grammar simplifiedGrammar = parser.getGrammar();
                     FileOps.write(simplifiedGrammar.getAsString(),saveFileName);
                     JPanel savedAddressPanel = new JPanel();
                     savedAddressPanel.setLayout(new BorderLayout());
                     savedAddressPanel.setBackground(Color.GREEN);
-                    JLabel savedLabel = new JLabel("<html><b>saved at</b> " + saveFileName + "</html>");
+                    JLabel savedLabel = new JLabel("<html><b>saved at</b> " + save.getName() + "</html>");
                     savedLabel.setFont(new Font("Arial", Font.PLAIN, 14));
                     savedAddressPanel.add(savedLabel);
                     infoPanel.add(savedAddressPanel,BorderLayout.SOUTH);

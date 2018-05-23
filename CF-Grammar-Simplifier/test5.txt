@@ -1,6 +1,0 @@
-S A B C
-a b
-S
-S -> Aa|B
-B -> a|BC
-C -> a|^

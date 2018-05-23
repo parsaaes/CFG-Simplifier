@@ -1,0 +1,9 @@
+V : [SABCD]
+T : [abd]
+S : S
+P : 
+S->ABaC|Aa|ABa|a|aC|AaC|BaC|Ba
+A->BC|B|C
+B->b
+C->D
+D->d

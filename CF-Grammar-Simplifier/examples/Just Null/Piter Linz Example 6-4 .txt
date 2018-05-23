@@ -1,0 +1,5 @@
+S Z
+a b
+S
+S -> aZb
+Z -> aZb | ^

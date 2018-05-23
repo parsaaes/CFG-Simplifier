@@ -14,10 +14,11 @@ public class Main {
 
         // If you don't want GUI, comment above lines and uncomment these lines
 
-//        String path = System.getProperty("user.dir") + "/" + "test6.txt";
+//        String path = System.getProperty("user.dir") + "/" + "examples/Lambda Free/Piter Linz EXERCISES 8.txt";
 //        Parser parser = new Parser(path);
 //        CFSimplifier cfSimplifier = new CFSimplifier();
 //        cfSimplifier.simplify(parser.getGrammar());
+//        cfSimplifier.sortProducts(parser.getGrammar());
 //        System.out.println(parser.getGrammar());
 //        FileOps.write(parser.getGrammar().toString(),path.substring(0,path.length()-4) + "-Simplified.txt");
 

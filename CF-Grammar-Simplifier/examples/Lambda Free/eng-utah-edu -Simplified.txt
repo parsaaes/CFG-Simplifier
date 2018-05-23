@@ -1,0 +1,6 @@
+SBA
+abcdef
+S
+S -> AB
+B -> c|d
+A -> aA|bB
